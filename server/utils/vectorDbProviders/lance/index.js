@@ -7,9 +7,8 @@ const { v4: uuidv4 } = require("uuid");
 const { sourceIdentifier } = require("../../chats");
 
 const LanceDb = {
-  uri: `${
-    !!process.env.STORAGE_DIR ? `${process.env.STORAGE_DIR}/` : "./storage/"
-  }lancedb`,
+  uri: `${!!process.env.STORAGE_DIR ? `${process.env.STORAGE_DIR}/` : "./storage/"
+    }lancedb`,
   name: "LanceDb",
   connect: async function () {
     if (process.env.VECTOR_DB !== "lancedb")
@@ -74,6 +73,7 @@ const LanceDb = {
       .execute();
 
     response.forEach((item) => {
+      console.log({ item, score: this.distanceToSimilarity(item._distance) })
       if (this.distanceToSimilarity(item._distance) < similarityThreshold)
         return;
       const { vector: _, ...rest } = item;
